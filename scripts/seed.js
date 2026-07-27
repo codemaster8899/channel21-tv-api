@@ -25,7 +25,7 @@ const Live = require("../model/homepage/live");
 const Banners = require("../model/homepage/program-show_banners");
 const Media = require("../model/homepage/social_media");
 
-const BASE = process.env.SEED_IMAGE_BASE || "http://localhost:5000";
+const BASE = process.env.SEED_IMAGE_BASE || "https://21-back.vercel.app";
 const figma = (n) =>
   `${BASE}/images/figma/figma-${String(n).padStart(2, "0")}.jpg`;
 const VIDEO = "https://www.youtube.com/watch?v=jNQXAC9IVRw";
