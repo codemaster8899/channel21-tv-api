@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body
+    style="
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <div
+      style="
+        width: 100%;
+        background-repeat: no-repeat;
+        background-color: #010006;
+        padding: 80px 70px 90px;
+        border-radius: 20px;
+      "
+    >
+      <table
+      style="width: 100%;"
+      >
+        <tbody       style="width: 100%;"
+        >
+          <tr style=" display: block; "><td style=" display: block; width:100%; text-align: right; float: right;"><img
+            src="cid:logoImg"
+            alt="logo"
+          /></td></tr>
+          
+          <tr style="
+          width: 100%;
+          min-height: 431px;
+          background-color: white;
+          border-radius: 40px;
+          padding-bottom:40px ;
+         
+          margin-top: 80px;
+          box-sizing: content-box;
+          position: relative;
+          display: block;
+        "><td style="width: 100%; display: block;">
+            <div
+            style="
+              text-align: center;
+              padding-top: 64px;
+              width: 80%;
+              margin: 40px auto 47px;
+            "
+          >
+            <p style="font-size: 22px; font-weight: 600; margin-bottom: 24px">
+              {{firstName}} {{lastName}}
+            </p>
+            <p style="font-size: 20px; line-height: 27.24px">
+        
+              {{text}}
+            </p>
+          </div>
+          <div style="width: 80%; margin: 0 auto">
+            <p style="display: flex; align-items: center">
+              <img src="cid:phoneImg" alt="phone" /><span>{{phone}}</span>
+            </p>
+            <p style="display: flex; align-items: center">
+              <img src="cid:emailImg" alt="email" /><span>{{email}}</span
+              >
+            </p>
+          </div>
+          </td></tr>
+        
+      </tbody>
+      </table>
+    </div>
+  </body>
+</html>

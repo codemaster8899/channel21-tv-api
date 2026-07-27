@@ -1,0 +1,4 @@
+node_modules
+.env
+nodemon
+public/images/seed-*.jpg
