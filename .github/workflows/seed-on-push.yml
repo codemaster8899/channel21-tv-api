@@ -1,0 +1,30 @@
+name: Seed production database
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "public/images/assets/**"
+      - "scripts/seed.js"
+      - "scripts/seed-on-deploy.js"
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    if: vars.SEED_ON_DEPLOY == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Seed database with image URLs
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          SEED_IMAGE_BASE: https://21-back.vercel.app
+          SEED_ON_DEPLOY: "true"
+        run: node scripts/seed-on-deploy.js

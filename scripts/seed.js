@@ -1,6 +1,6 @@
 /**
  * Full example DB seed for local 21TV development.
- * Uses Figma Dar-21 Programs screen images from public/images/figma/
+ * Uses 21TV content images from public/images/assets/
  * Usage: node scripts/seed.js
  */
 require("dotenv").config({
@@ -25,9 +25,39 @@ const Live = require("../model/homepage/live");
 const Banners = require("../model/homepage/program-show_banners");
 const Media = require("../model/homepage/social_media");
 
-const BASE = process.env.SEED_IMAGE_BASE || "https://21-back.vercel.app";
-const figma = (n) =>
-  `${BASE}/images/figma/figma-${String(n).padStart(2, "0")}.jpg`;
+function getImageBase() {
+  if (process.env.SEED_IMAGE_BASE) {
+    return process.env.SEED_IMAGE_BASE.replace(/\/$/, "");
+  }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return "https://21-back.vercel.app";
+}
+
+const ASSET_IMAGES = {
+  1: "0c0c8400767016937458e93a383c65bd92e6873d.jpg", // Yerevan Evening poster
+  2: "2de7e7b433a215af0c2a27e1713e07c085bac467.jpg", // Gagik Shahbazyan
+  3: "4c173ff5ac7152bd90363f0dff898eca25afe0eb-1.jpg", // Gevorg & Arman
+  4: "5e47277f8637ce4420f262e73dd392fdc6cfc7be.jpg", // Or Bari multi-panel
+  5: "712b83ee3495dc05ca7bea62babebb7140bafa8d.jpg", // Karen Hambardzumyan
+  6: "7a20e3b872c27e95fffaf80615f4dd3d207319c1.jpg", // Without a Tie guest
+  7: "7caac6a45af507c7960d5c3ad1a3e38f7cf99e8c.jpg", // Or Bari Rafo
+  8: "8ce04c4742a07d46839828e74e1ff79048967ba6.jpg", // Studio / guests
+  9: "93586e95273fd7bbbcb1c47eb08b8f8fc3841220.jpg", // Or Bari guests
+  10: "97592eb91a036d1d080a144284b831bed2a4225a.jpg", // Music guests
+  11: "b0d73efa44b742cc1b02c70ac29dd52f155a1710.jpg", // 21TV host
+  12: "b143dec7b7e664699d77b2d211760db4182abeec.jpg", // Or Bari honey
+  13: "d537955e82d74d46e6cc8f5de073fb0ad0fb5ad4.jpg", // Boing Orchestra
+  14: "c8cdf9b3885ce98cf0e37311dd270453f2b0e4ad.jpg", // Hakob Ghazanchyan
+  15: "dc7f90f2281b7b34bbce0ffe89d44362e50059f3.jpg", // Erk Ergots Metere
+  17: "c490f4f78c7720d18e7762d9bc0a17f45e682c44.jpg", // Argishti Aroyan
+  18: "4c173ff5ac7152bd90363f0dff898eca25afe0eb-episode.jpg", // Yerevan Evening ep
+};
+const asset = (n) => `${getImageBase()}/images/assets/${ASSET_IMAGES[n]}`;
 const VIDEO = "https://www.youtube.com/watch?v=jNQXAC9IVRw";
 
 const TYPE_PROGRAMS = new mongoose.Types.ObjectId("624d89fd69c3c4a1efa91efa");
@@ -95,7 +125,7 @@ async function seedTypes() {
 }
 
 async function seedPrograms() {
-  // Matches Figma Programs screen rows / hero assets
+  // Matches Programs screen rows / hero assets
   const programs = await Program.insertMany([
     {
       name: t("Երևանյան Երեկո", "Ереванский вечер", "Yerevan Evening"),
@@ -104,7 +134,7 @@ async function seedPrograms() {
         "Вечернее шоу с Гором Барсегяном",
         "Evening show with Gor Barseghyan",
       ),
-      image: figma(1),
+      image: asset(1),
       banners_order: 1,
       program_type_id: TYPE_PROGRAMS,
       link: VIDEO,
@@ -116,7 +146,7 @@ async function seedPrograms() {
         "Утренняя программа с гостями",
         "Morning show with guests",
       ),
-      image: figma(4),
+      image: asset(4),
       banners_order: 2,
       program_type_id: TYPE_PROGRAMS,
       link: VIDEO,
@@ -128,7 +158,7 @@ async function seedPrograms() {
         "Откровенные интервью",
         "Candid interviews",
       ),
-      image: figma(5),
+      image: asset(5),
       banners_order: 3,
       program_type_id: TYPE_PROGRAMS,
       link: VIDEO,
@@ -144,31 +174,31 @@ async function seedPrograms() {
         "Овик Аршакян и The Boing Orchestra",
         "Hovik Arshakyan and The Boing Orchestra",
       ),
-      image: figma(13),
+      image: asset(13),
       banners_order: 1,
       program_type_id: TYPE_SHOWS,
       link: VIDEO,
     },
     {
-      name: t("Երաժշտական երեկո", "Музыкальный вечер", "Music Night"),
+      name: t("ԵՐԳ ԵՐԳՈՑ ՄԵԾԵՐԸ", "Великие песни", "The Greats of Songs"),
       description: t(
-        "Երաժշտություն և հյուրեր",
-        "Музыка и гости",
-        "Music and guests",
+        "Երաժշտական հաղորդում",
+        "Музыкальная программа",
+        "Music program",
       ),
-      image: figma(10),
+      image: asset(15),
       banners_order: 2,
       program_type_id: TYPE_SHOWS,
       link: VIDEO,
     },
     {
-      name: t("Շոու պատմություններ", "Истории шоу", "Show Stories"),
+      name: t("Dar 21", "Dar 21", "Dar 21"),
       description: t(
-        "Հատուկ թողարկումներ",
-        "Специальные выпуски",
-        "Special episodes",
+        "Տոնական հատուկ թողարկում",
+        "Праздничный спецвыпуск",
+        "Holiday special",
       ),
-      image: figma(3),
+      image: asset(11),
       banners_order: 1,
       program_type_id: TYPE_FILMS,
       link: VIDEO,
@@ -180,7 +210,7 @@ async function seedPrograms() {
         "Специальный выпуск",
         "Special broadcast",
       ),
-      image: figma(11),
+      image: asset(11),
       banners_order: 2,
       program_type_id: TYPE_FILMS,
       link: VIDEO,
@@ -191,24 +221,29 @@ async function seedPrograms() {
 }
 
 async function seedHistories(programs) {
-  // Episode thumbs from Figma screen (as-is)
+  // Episode thumbs from the content image set.
   const episodeSets = [
     // Երևանյան Երեկո
     [
+      {
+        img: 18,
+        title: t(
+          "Երևանյան Երեկո 03",
+          "Ереванский вечер 03",
+          "Yerevan Evening 03",
+        ),
+        duration: "32:13",
+        dateOffset: 1200,
+      },
       { img: 1, title: t("Գոռ Բարսեղյան", "Гор Барсегян", "Gor Barseghyan") },
       {
         img: 3,
-        title: t("Գևորգ և Արման", "Геворг и Арман", "Gevorg & Arman"),
+        title: t("Գևորգ Մկրտչյան", "Геворг Мкртчян", "Gevorg Mkrtchyan"),
       },
       {
-        img: 13,
-        title: t(
-          "The Boing Orchestra",
-          "The Boing Orchestra",
-          "The Boing Orchestra",
-        ),
+        img: 3,
+        title: t("Արման Անտոնյան", "Арман Антонян", "Arman Antonyan"),
       },
-      { img: 11, title: t("Հատուկ հյուր", "Особый гость", "Special guest") },
     ],
     // Օրը Բարի
     [
@@ -217,62 +252,72 @@ async function seedHistories(programs) {
         img: 7,
         title: t("Ռաֆո Խաչատրյան", "Рафо Хачатрян", "Rafo Khachatryan"),
       },
-      { img: 9, title: t("Հյուրեր", "Гости", "Guests") },
+      {
+        img: 9,
+        title: t(
+          "ԱՐԱԲՈ ԻՍՊԻՐՅԱՆ և ՎԱՀԵ ՀԱՐՈՒԹՅՈՒՆՅԱՆ",
+          "Арабо Испирян и Ваге Арутюнян",
+          "Arabo Ispiryan & Vahe Harutyunyan",
+        ),
+      },
       {
         img: 12,
-        title: t("Առավոտյան թողարկում", "Утренний выпуск", "Morning episode"),
+        title: t("ԷՎԵԼԻՆԱ և ՄԱՆԵ", "Эвелина и Манe", "Evik & Man_go"),
       },
     ],
     // Առանց Փողկապի
     [
       {
+        img: 17,
+        title: t("ԱՐԳԻՇՏԻ ԱՐՈՅԱՆ", "Аргишти Ароян", "Argishti Aroyan"),
+      },
+      {
         img: 5,
         title: t(
-          "Կարեն Համբարձումյան",
+          "ԿԱՐԵՆ ՀԱՄԲԱՐՁՈՒՄՅԱՆ",
           "Карен Амбарцумян",
           "Karen Hambardzumyan",
         ),
       },
       {
-        img: 14,
-        title: t("Հակոբ Ղազանչյան", "Акоп Газанчян", "Hakob Ghazanchyan"),
+        img: 2,
+        title: t("ԳԱԳԻԿ ՇԱՀԲԱԶՅԱՆ", "Гагик Шахбазян", "Gagik Shahbazyan"),
       },
       {
-        img: 2,
-        title: t("Գագիկ Շահբազյան", "Гагик Шахбазян", "Gagik Shahbazyan"),
+        img: 14,
+        title: t("ՀԱԿՈԲ ՂԱԶԱՆՉՅԱՆ", "Акоп Газанчян", "Hakob Ghazanchyan"),
       },
-      { img: 6, title: t("Նոր հյուր", "Новый гость", "New guest") },
     ],
     // The Boing Orchestra
     [
       {
         img: 13,
-        title: t("Հովիկ Արշակյան", "Овик Аршакян", "Hovik Arshakyan"),
+        title: t("ՀՈՎԻԿ ԱՐՇԱԿՅԱՆ", "Овик Аршакян", "Hovik Arshakyan"),
       },
-      { img: 10, title: t("Բեմում", "На сцене", "On stage") },
-      { img: 8, title: t("Հյուրեր", "Гости", "Guests") },
-      { img: 11, title: t("Թողարկում 4", "Выпуск 4", "Episode 4") },
+      { img: 13, title: t("ԲԵՄՈՒՄ", "На сцене", "On stage") },
+      { img: 8, title: t("ՀՅՈՒՐԵՐ", "Гости", "Guests") },
+      { img: 11, title: t("ԹՈՂԱՐԿՈՒՄ 4", "Выпуск 4", "Episode 4") },
     ],
-    // Music Night
+    // Erk Ergots Metere
     [
-      { img: 10, title: t("Դրվագ 1", "Серия 1", "Episode 1") },
-      { img: 8, title: t("Դրվագ 2", "Серия 2", "Episode 2") },
-      { img: 3, title: t("Դրվագ 3", "Серия 3", "Episode 3") },
-      { img: 1, title: t("Դրվագ 4", "Серия 4", "Episode 4") },
+      { img: 15, title: t("ԴՐՎԱԳ 1", "Серия 1", "Episode 1") },
+      { img: 15, title: t("ԴՐՎԱԳ 2", "Серия 2", "Episode 2") },
+      { img: 10, title: t("ԴՐՎԱԳ 3", "Серия 3", "Episode 3") },
+      { img: 8, title: t("ԴՐՎԱԳ 4", "Серия 4", "Episode 4") },
     ],
-    // Show Stories
+    // Dar 21
     [
-      { img: 3, title: t("Դրվագ 1", "Серия 1", "Episode 1") },
-      { img: 11, title: t("Դրվագ 2", "Серия 2", "Episode 2") },
-      { img: 8, title: t("Դրվագ 3", "Серия 3", "Episode 3") },
-      { img: 13, title: t("Դրվագ 4", "Серия 4", "Episode 4") },
+      { img: 11, title: t("Dar 21", "Dar 21", "Dar 21") },
+      { img: 11, title: t("ՀՅՈՒՐ 1", "Гость 1", "Guest 1") },
+      { img: 8, title: t("ՀՅՈՒՐ 2", "Гость 2", "Guest 2") },
+      { img: 10, title: t("ՀՅՈՒՐ 3", "Гость 3", "Guest 3") },
     ],
     // 21TV Special
     [
-      { img: 11, title: t("Դրվագ 1", "Серия 1", "Episode 1") },
-      { img: 8, title: t("Դրվագ 2", "Серия 2", "Episode 2") },
-      { img: 10, title: t("Դրվագ 3", "Серия 3", "Episode 3") },
-      { img: 4, title: t("Դրվագ 4", "Серия 4", "Episode 4") },
+      { img: 11, title: t("ԴՐՎԱԳ 1", "Серия 1", "Episode 1") },
+      { img: 8, title: t("ԴՐՎԱԳ 2", "Серия 2", "Episode 2") },
+      { img: 10, title: t("ԴՐՎԱԳ 3", "Серия 3", "Episode 3") },
+      { img: 4, title: t("ԴՐՎԱԳ 4", "Серия 4", "Episode 4") },
     ],
   ];
 
@@ -285,9 +330,12 @@ async function seedHistories(programs) {
         episode: ei + 1,
         link: VIDEO,
         title: ep.title,
-        duration: `0${ei + 1}:${20 + ei * 5}`,
-        date: new Date(Date.now() - (ei + 1) * 86400000 * 3),
-        image: figma(ep.img),
+        duration:
+          ep.duration || `0${ei + 1}:${String(20 + ei * 5).padStart(2, "0")}`,
+        date: ep.dateOffset
+          ? new Date(Date.now() - ep.dateOffset * 86400000)
+          : new Date(Date.now() - (ei + 1) * 86400000 * 3),
+        image: asset(ep.img),
       });
     });
   });
@@ -298,7 +346,18 @@ async function seedHistories(programs) {
 async function seedSliders() {
   await Slider.insertMany([
     {
-      image: figma(13),
+      image: asset(15),
+      title: t("ԵՐԳ ԵՐԳՈՑ ՄԵԾԵՐԸ", "Великие песни", "The Greats of Songs"),
+      description: t(
+        "Երաժշտական հաղորդում",
+        "Музыкальная программа",
+        "Music program",
+      ),
+      link: VIDEO,
+      slider_order: 1,
+    },
+    {
+      image: asset(13),
       title: t(
         "The Boing Orchestra",
         "The Boing Orchestra",
@@ -306,17 +365,17 @@ async function seedSliders() {
       ),
       description: t("Հովիկ Արշակյան", "Овик Аршакян", "Hovik Arshakyan"),
       link: VIDEO,
-      slider_order: 1,
-    },
-    {
-      image: figma(4),
-      title: t("Օրը Բարի", "Добрый день", "Good Day"),
-      description: t("Նոր թողարկում", "Новый выпуск", "New episode"),
-      link: VIDEO,
       slider_order: 2,
     },
     {
-      image: figma(1),
+      image: asset(4),
+      title: t("Օրը Բարի", "Добрый день", "Good Day"),
+      description: t("Նոր թողարկում", "Новый выпуск", "New episode"),
+      link: VIDEO,
+      slider_order: 3,
+    },
+    {
+      image: asset(1),
       title: t("Երևանյան Երեկո", "Ереванский вечер", "Yerevan Evening"),
       description: t(
         "Գոռ Բարսեղյանի հետ",
@@ -324,7 +383,7 @@ async function seedSliders() {
         "With Gor Barseghyan",
       ),
       link: VIDEO,
-      slider_order: 3,
+      slider_order: 4,
     },
   ]);
   console.log("sliders");
@@ -333,7 +392,7 @@ async function seedSliders() {
 async function seedFaces() {
   await Faces.insertMany([
     {
-      image: figma(11),
+      image: asset(11),
       firstName: t("Հաղորդավար", "Ведущий", "Host"),
       lastName: t("21TV", "21TV", "21TV"),
       role: t("Հաղորդավար", "Ведущий", "Host"),
@@ -342,7 +401,7 @@ async function seedFaces() {
       instagramLink: "https://instagram.com",
     },
     {
-      image: figma(5),
+      image: asset(5),
       firstName: t("Կարեն", "Карен", "Karen"),
       lastName: t("Համբարձումյան", "Амбарцумян", "Hambardzumyan"),
       role: t("Հյուր", "Гость", "Guest"),
@@ -351,7 +410,7 @@ async function seedFaces() {
       instagramLink: "https://instagram.com",
     },
     {
-      image: figma(2),
+      image: asset(2),
       firstName: t("Գագիկ", "Гагик", "Gagik"),
       lastName: t("Շահբազյան", "Шахбазян", "Shahbazyan"),
       role: t("Հյուր", "Гость", "Guest"),
@@ -360,7 +419,7 @@ async function seedFaces() {
       instagramLink: "https://instagram.com",
     },
     {
-      image: figma(13),
+      image: asset(13),
       firstName: t("Հովիկ", "Овик", "Hovik"),
       lastName: t("Արշակյան", "Аршакян", "Arshakyan"),
       role: t("Երաժիշտ", "Музыкант", "Musician"),
@@ -369,6 +428,24 @@ async function seedFaces() {
         "The Boing Orchestra",
         "The Boing Orchestra",
       ),
+      facebookLink: "https://facebook.com",
+      instagramLink: "https://instagram.com",
+    },
+    {
+      image: asset(17),
+      firstName: t("ԱՐԳԻՇՏԻ", "Аргишти", "Argishti"),
+      lastName: t("ԱՐՈՅԱՆ", "Ароян", "Aroyan"),
+      role: t("Հյուր", "Гость", "Guest"),
+      description: t("Առանց Փողկապի", "Без галстука", "Without a Tie"),
+      facebookLink: "https://facebook.com",
+      instagramLink: "https://instagram.com",
+    },
+    {
+      image: asset(1),
+      firstName: t("Գոռ", "Гор", "Gor"),
+      lastName: t("ԲԱՐՍԵՂՅԱՆ", "Барсегян", "Barseghyan"),
+      role: t("Հաղորդավար", "Ведущий", "Host"),
+      description: t("Երևանյան Երեկո", "Ереванский вечер", "Yerevan Evening"),
       facebookLink: "https://facebook.com",
       instagramLink: "https://instagram.com",
     },
@@ -390,7 +467,7 @@ async function seedSchedule(programs) {
     {
       h: 15,
       m: 30,
-      name: t("Երաժշտական երեկո", "Музыкальный вечер", "Music Night"),
+      name: t("ԵՐԳ ԵՐԳՈՑ ՄԵԾԵՐԸ", "Великие песни", "The Greats of Songs"),
       p: 4,
     },
     {
@@ -479,7 +556,7 @@ async function seedMisc() {
   });
 
   await PageContent.create({
-    image: figma(8),
+    image: asset(8),
     title: t("դեմքեր", "лица", "faces"),
   });
 
@@ -495,16 +572,18 @@ async function seedMisc() {
   console.log("contact, social, live, footer, page content, translations");
 }
 
-async function main() {
+async function runSeed() {
   if (!process.env.DB_URL) {
     throw new Error("DB_URL missing in .env");
   }
-  const figmaDir = path.join(__dirname, "..", "public", "images", "figma");
-  if (!fs.existsSync(figmaDir) || fs.readdirSync(figmaDir).length < 10) {
+  const assetDir = path.join(__dirname, "..", "public", "images", "assets");
+  if (!fs.existsSync(assetDir) || fs.readdirSync(assetDir).length < 10) {
     throw new Error(
-      "Figma images missing in public/images/figma/. Copy assets there first.",
+      "Content images missing in public/images/assets/. Copy assets there first.",
     );
   }
+
+  console.log(`Image base URL: ${getImageBase()}`);
 
   await mongoose.connect(process.env.DB_URL);
   console.log("connected");
@@ -520,12 +599,16 @@ async function main() {
   await seedBanners(programs);
   await seedMisc();
 
-  console.log("\nSeed complete with Figma images.");
+  console.log("\nSeed complete with content images.");
   console.log("Login: asimonyan / 123456");
   await mongoose.disconnect();
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (require.main === module) {
+  runSeed().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
+
+module.exports = { runSeed, getImageBase, asset, ASSET_IMAGES };
